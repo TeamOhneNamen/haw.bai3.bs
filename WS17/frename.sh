@@ -5,12 +5,10 @@
 # Thorben Schomacker
 # 19.02.2018
 
-echo Umbenennung im Verzeichnis: $1
-echo Durch anhaengen von $2 an den Dateinamen
+echo "Umbenennung im Verzeichnis: $1 durch anhaengen von $2 an den Dateinamen"
 
-# Inhalt des aktuellen Arbeitsverzeichnisses als 
-#Liste von Dateinamen ausgeben. Übergebene 
-#Infos SPEC (Dateiname oder Verzeichnis) werden 
-#verwendet
-
-ls [-la] [SPEC]
+for entry in "$1"/*
+do
+	mv "./$entry" "$entry$2"
+  echo "$entry wurde umbenannt in $entry$2"
+done
