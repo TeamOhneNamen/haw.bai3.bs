@@ -1,12 +1,12 @@
 /*
- *      p3-1.c
- *      Beispielprogramm 1, Abschnitt 3
+ * @author: Thorben Schomacker
+ *
  */
 
   void main(void)
   {
-	/* creates a new text file */
-    fopen("textFile.txt" ,"a");
-	fclose(fp);
+	char* filename = fgets(); 
+	file = creat(*/filename.txt);
+	file.close();
 
   } /* main() */
