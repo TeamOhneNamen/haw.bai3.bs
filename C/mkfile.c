@@ -6,23 +6,29 @@
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
+#include <unistd.h>
 int main(void) {
-	//Variablen initialisieren und einige deklarieren
-	FILE *fp;
-	int size = 30;
-	char filename[size];
-	int mode = 0700;
+	//Konstanten 
+	const int size = 30;
+	const int mode = 0700;
+	char path[] = "/home/students/acf200/git/haw.bai3.bs/";
+	//Variablen
+	int fd;
+	char name[size];
+
+
 	
 	//eigabe des Namens der neuen textdatei
-	fgets(filename, size, fp); 
+	fgets(name, size, stdin); 
 	//zeilenumbruch wegschneiden
-	strtok(filename, "\n");
+	strtok(name, "\n");
 	//'./' und '.txt' anfügen und datei erstellen mit dem in mode gespeicherten berechtigungen
-	creat(strcat(strcat("./", filename), ".txt"), mode);
+	strcat(strcat(path, name), ".txt");
+	fd = creat(path, mode);
 	//datei schließen
-	fclose(fp);
+	close(fd);
 	//ausgaben
-	printf("Name der neuen Datei: %s\n", filename);
-	printf("Die Datei bsp1 wurde erfolgreich angelegt!");
-	return(0);
+	printf("Name der neuen Datei: %s\n", name);
+	printf("Die Datei bsp1 wurde erfolgreich angelegt!\n");
+	return 0;
 }
