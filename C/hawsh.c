@@ -15,3 +15,7 @@ int main(void) {
        perror("getcwd() error");
    return 0;
 }
+
+// https://brennan.io/2015/01/16/write-a-shell-in-c/
+// https://stackoverflow.com/questions/298510/how-to-get-the-current-directory-in-a-c-program
+// 
