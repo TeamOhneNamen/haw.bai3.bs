@@ -1,3 +1,5 @@
+package vorlesungscode;
+
 /* ThreadTest9.java
  Version 2.0 
  Autor: M. Hübner, HAW Hamburg

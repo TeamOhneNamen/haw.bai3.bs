@@ -1,3 +1,5 @@
+package vorlesungscode;
+
 /* ThreadTest8.java
  Version 1.0
  Autor: M. Huebner

@@ -13,31 +13,28 @@ public class Accident extends Thread {
 
 		this.carList = carList;
 		this.isRennenGestartet = isRennenGestartet;
-		this.isUnfall = true;
+		this.isUnfall = false;
 	}
-	
-	public boolean isUnfall(){
+
+	public boolean isUnfall() {
 		return isUnfall;
 	}
 
 	@Override
 	public void run() {
 		Random rand = new Random();
-		int randInt = rand.nextInt(10000);
+		int randInt = rand.nextInt(1000);
 
 		try {
 			Thread.sleep(randInt);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Thread.currentThread().interrupt();
 		}
-
-		if (isRennenGestartet) {
-			System.out.println("UNFALL");
+		if (!Thread.currentThread().isInterrupted()) {
+			isUnfall=true;
 			for (int j = 0; j < carList.size(); j++) {
 				carList.get(j).interrupt();
 			}
-		}
+		}		
 	}
-
 }

@@ -1,3 +1,5 @@
+package vorlesungscode;
+
 /* ThreadTest7.java
  Version 1.0
  Autor: M. Huebner

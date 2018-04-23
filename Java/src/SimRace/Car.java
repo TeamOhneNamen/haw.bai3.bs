@@ -5,6 +5,7 @@ import java.util.Random;
 public class Car extends Thread implements Comparable<Car>{
 
 	int runden;
+	int rundengefahren;
 	int zeit = 0;
 	String carName;
 	
@@ -29,14 +30,25 @@ public class Car extends Thread implements Comparable<Car>{
 		for (int i = 0; i < runden; i++) {
 			Random rand = new Random();
 			int randInt = rand.nextInt(100);
-			try {
-				Car.sleep(randInt);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if(!Thread.currentThread().isInterrupted()) {
+				try {
+					Car.sleep(randInt);
+				} catch (InterruptedException e) {	
+					Thread.currentThread().interrupt();
+				}
+				if (this.isInterrupted()) {
+					System.out.println(carName + ": hatte einen Unfall");
+				}
+				zeit = zeit + randInt;
+				rundengefahren=i+1;
+			}else {
+			Thread.currentThread().interrupt();
 			}
-			zeit = zeit + randInt;
-			
+		}
+	}
+	public void printWinner(int k) {
+		if (!Thread.currentThread().isInterrupted()) {
+			System.out.println((k + 1) + ". Platz: " + carName + " Zeit: " + zeit + " Runden: " + rundengefahren);	
 		}
 	}
 }
