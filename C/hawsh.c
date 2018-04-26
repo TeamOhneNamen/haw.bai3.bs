@@ -248,14 +248,14 @@ void hawsh_loop(void)
   char **args;
   int status;
 	char cwd[1024];
+char user[1024];
 
   do {
-	uid_t uid = geteuid();
-	struct psswd *pw = getpwuid(uid);
+	//user = getenv("USER");
 	
 		
 		if (getcwd(cwd, sizeof(cwd)) != NULL) 
-    	fprintf(stdout, "%s, %s >", cwd, pw);
+    	fprintf(stdout, "%s sitz in %s >", getenv("USER"), cwd);
 		else
 			perror("getcwd() error");
 		
