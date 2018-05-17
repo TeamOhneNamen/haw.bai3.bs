@@ -69,11 +69,10 @@ public class Mensa extends Thread {
 				studentListe.get(k).join();
 				
 			}
-			for(int l = 0; l < getANZAHLKASSEN(); l++) {
+			for (int l = 0; l < getANZAHLKASSEN(); l++) {
 				System.out.println("an Kasse " + kassenListe.get(l).getKASSENNUMMER() + " stehen " + kassenListe.get(l).studentenListe.size() + " studenten an");
 			}
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
