@@ -3,7 +3,7 @@ package schere_stein_papier;
 import java.util.Random;
 
 public class Spieler extends Thread  {
-	Spielobjekt[] spielobjekte = {new Schere(), new Stein(), new Papier()};
+	Spielobjekt[] spielobjekte = {Spielobjekt.SCHERE, Spielobjekt.STEIN, Spielobjekt.PAPIER};
 	Spielobjekt spielobjekt;
 	Random rand = new Random();
 	
