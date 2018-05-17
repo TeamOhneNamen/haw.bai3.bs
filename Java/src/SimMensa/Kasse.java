@@ -7,7 +7,7 @@ public class Kasse extends Thread  implements Comparable<Kasse>{
 	private int KASSENNUMMER;
 	public ArrayList<Student> studentenListe = new ArrayList<Student>(); 
 	
-	public Integer getStudentenListeSice() {
+	public Integer getStudentenListeSize() {
 		return studentenListe.size();
 	}
 	
@@ -21,7 +21,7 @@ public class Kasse extends Thread  implements Comparable<Kasse>{
 	
 	@Override
     public int compareTo(Kasse other) {
-    	return this.getStudentenListeSice().compareTo(other.getStudentenListeSice());
+    	return this.getStudentenListeSize().compareTo(other.getStudentenListeSize());
     }
 	
 	public Kasse() {

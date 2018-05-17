@@ -22,7 +22,7 @@ public class Student extends Thread {
 	public void run(){
 		System.out.println("Student mit der ID: " + ID + " betritt die Mensa");
 		int kassenNummer = mensa.anstehen(this);
-		System.out.println("Student " + ID + " steht an kasse " + kassenNummer);
+		System.out.println("Student " + ID + " steht an Kasse " + kassenNummer);
 	}
 	
 }
