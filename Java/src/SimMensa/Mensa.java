@@ -2,6 +2,9 @@ package SimMensa;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Mensa extends Thread {
 
@@ -11,30 +14,26 @@ public class Mensa extends Thread {
 	// Variablen
 	private ArrayList<Kasse> kassenListe = new ArrayList<Kasse>();
 	private ArrayList<Student> studentListe = new ArrayList<Student>();
+	public Lock lock = new ReentrantLock();
 
 	// getter und setter
 
-	// getter und setter studentListe
+	// getter studentListe
 	public ArrayList<Student> getstudentListe() {
 		return studentListe;
 	}
+	// getter kassenListe
+	public ArrayList<Kasse> getkassenListe() {
+		return kassenListe;
+	}
 
-	// getter und setter ANZAHLKASSEN
+	// getter ANZAHLKASSEN
 	public int getANZAHLKASSEN() {
 		return ANZAHLKASSEN;
 	}
-
-	public void setANZAHLKASSEN(int anzahlKassen) {
-		ANZAHLKASSEN = anzahlKassen;
-	}
-
-	// getter und setter ANZAHLSTUDENTEN
+	// getter ANZAHLSTUDENTEN
 	public int getANZAHLSTUDENTEN() {
 		return ANZAHLSTUDENTEN;
-	}
-
-	public void setANZAHLSTUDENTEN(int anzahlStudenten) {
-		ANZAHLSTUDENTEN = anzahlStudenten;
 	}
 
 	// constructor
@@ -43,11 +42,13 @@ public class Mensa extends Thread {
 		this.ANZAHLSTUDENTEN = anzahlStudenten;
 	}
 
+	//run methode
 	public void run() {
 		kassenEroeffnen();
 		studentenSpawn();
 	}
 
+	//eröffne alle kassen und speichere sie in KassenArray
 	private void kassenEroeffnen() {
 		for (int i = 0; i < getANZAHLKASSEN(); i++) {
 			Kasse tmpKasse = new Kasse();
@@ -57,6 +58,7 @@ public class Mensa extends Thread {
 		}
 	}
 
+	//spawne alle studenten und speichere sie in KassenArray
 	private void studentenSpawn() {
 		for (int j = 0; j < getANZAHLSTUDENTEN(); j++) {
 			Student tmpStudent = new Student(this);
@@ -67,22 +69,52 @@ public class Mensa extends Thread {
 		try {
 			for (int k = 0; k < getANZAHLSTUDENTEN(); k++) {
 				studentListe.get(k).join();
-				
+
 			}
 			for (int l = 0; l < getANZAHLKASSEN(); l++) {
-				System.out.println("an Kasse " + kassenListe.get(l).getKASSENNUMMER() + " stehen " + kassenListe.get(l).studentenListe.size() + " studenten an");
+				System.out.println("an Kasse " + kassenListe.get(l).getKASSENNUMMER() + " stehen "
+						+ kassenListe.get(l).studentenListe.size() + " studenten an");
 			}
+
 		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
 
-	public synchronized int anstehen(Student student) {
-		
+	public void anstehen(Student student) {
+		lock.lock();
 		ArrayList<Student> studentenListeVonKasse = kassenListe.get(0).studentenListe;
 		studentenListeVonKasse.add(studentenListeVonKasse.size(), student);
+		student.setKasse(kassenListe.get(0));
 		Collections.sort(kassenListe);
-		return kassenListe.get(0).getKASSENNUMMER();
+		lock.unlock();
+
+	}
+
+	@Override
+	public void interrupt() {
+		for (int i = 0; i < studentListe.size(); i++) {
+			studentListe.get(i).interrupt();
+		}
+		for (int j = 0; j < kassenListe.size(); j++) {
+			kassenListe.get(j).interrupt();
+		}
+		try {
+			for (int i = 0; i < studentListe.size(); i++) {
+				studentListe.get(i).join();
+			}
+
+			for (int j = 0; j < kassenListe.size(); j++) {
+				kassenListe.get(j).join();
+				System.out.println("Kasse: " + kassenListe.get(j).getKASSENNUMMER() + " hat jetzt geschlossen!");
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		super.interrupt();
 	}
 }
