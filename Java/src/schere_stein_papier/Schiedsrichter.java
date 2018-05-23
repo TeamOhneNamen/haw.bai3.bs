@@ -15,8 +15,8 @@ public class Schiedsrichter extends Thread {
 	@Override
 	public void run() {
 		int runde = 1;
-		 while (runde <= RUNDEN) {
-//		while (true) {
+//		 while (runde <= RUNDEN) {
+		while (!isInterrupted()) {
 			System.out.println("round:  " + ((Integer) runde).toString());
 			System.out.println("Auswertung: ");
 			this.tisch.auswertung(this);

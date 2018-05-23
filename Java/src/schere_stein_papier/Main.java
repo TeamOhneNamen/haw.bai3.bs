@@ -12,11 +12,11 @@ public class Main {
 		Spieler thorben = new Spieler(1, kasino_tisch);
 		Spieler ferdi = new Spieler(2, kasino_tisch);
 		Schiedsrichter schiri = new Schiedsrichter(kasino_tisch, thorben, ferdi);
-		Timekeeper t = new Timekeeper(schiri, thorben, ferdi, 300);
+//		Timekeeper t = new Timekeeper(schiri, thorben, ferdi, 300);
 		thorben.start();
 		ferdi.start();
 		schiri.start();
-		t.start();
+//		t.start();
 //		try {
 //			thorben.join();
 //			ferdi.join();
@@ -24,20 +24,21 @@ public class Main {
 //		} catch (InterruptedException e) {
 //			e.printStackTrace();
 //		}
-//		Timer timer = new Timer(300, new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				thorben.interrupt();
-//				ferdi.interrupt();
-//				schiri.interrupt();
-//			}
-//		});
+		Timer timer = new Timer(300, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Halt Stop"+ "[2J");
+				thorben.interrupt();
+				ferdi.interrupt();
+				schiri.interrupt();
+			}
+		});
 //		timer.setRepeats(false); // Only execute once
 //		timer.start();
-//		Thread.sleep(30);
-//		schiri.interrupt();
-//		thorben.interrupt();
-//		ferdi.interrupt();
+		Thread.sleep(30);
+		schiri.interrupt();
+		thorben.interrupt();
+		ferdi.interrupt();
 		
 
 	}

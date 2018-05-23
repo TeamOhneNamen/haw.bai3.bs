@@ -17,7 +17,7 @@ public class Spieler extends Thread {
 
 	@Override
 	public void run() {
-		while (true) {
+		while (!isInterrupted()) {
 			guess();
 			this.tisch.zugriff(this.getSpielerNummer(), this.getSpielobjekt());
 		}
