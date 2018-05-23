@@ -19,21 +19,13 @@ public class Spieler extends Thread {
 	public void run() {
 		while (!isInterrupted()) {
 			guess();
-			this.tisch.zugriff(this.getSpielerNummer(), this.getSpielobjekt());
+			this.tisch.zugriff(this.getSpielerNummer(), spielobjekt);
 		}
 
 	}
 
 	public void guess() {
 		this.spielobjekt = spielobjekte[ThreadLocalRandom.current().nextInt(0, spielobjekte.length)];
-	}
-
-	public Spielobjekt getSpielobjekt() {
-		return spielobjekt;
-	}
-
-	public void setSpielobjekt(Spielobjekt spielobjekt) {
-		this.spielobjekt = spielobjekt;
 	}
 
 	public Integer getSpielerNummer() {
