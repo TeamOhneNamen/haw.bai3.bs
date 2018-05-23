@@ -4,23 +4,39 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Spieler extends Thread {
-	private int points = 0;
 	Spielobjekt[] spielobjekte = { Spielobjekt.SCHERE, Spielobjekt.STEIN, Spielobjekt.PAPIER };
+	Spielobjekt spielobjekt;
 	Random rand = new Random();
-	
+	private Tisch tisch;
+	private int spieler_nummer;
+
+	Spieler(int nummer, Tisch t) {
+		this.spieler_nummer = nummer;
+		this.tisch = t;
+	}
+
+	@Override
 	public void run() {
-		guess();
+		while (true) {
+			guess();
+			this.tisch.zugriff(this.getSpielerNummer(), this.getSpielobjekt());
+		}
+
 	}
 
-	public synchronized Spielobjekt guess() {
-		return spielobjekte[ThreadLocalRandom.current().nextInt(0, spielobjekte.length)];
+	public void guess() {
+		this.spielobjekt = spielobjekte[ThreadLocalRandom.current().nextInt(0, spielobjekte.length)];
 	}
 
-	public int getPoints() {
-		return this.points;
+	public Spielobjekt getSpielobjekt() {
+		return spielobjekt;
 	}
 
-	public void win() {
-		this.points++;
+	public void setSpielobjekt(Spielobjekt spielobjekt) {
+		this.spielobjekt = spielobjekt;
+	}
+
+	public Integer getSpielerNummer() {
+		return spieler_nummer;
 	}
 }
