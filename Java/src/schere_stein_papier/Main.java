@@ -1,36 +1,44 @@
 package schere_stein_papier;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.Timer;
+
 public class Main {
 
-	public static void main(String[] args) {
-		Spieler thorben = new Spieler();
-		Spieler ferdi = new Spieler();
-		Tisch kasino_tisch = new Tisch(thorben,ferdi);
-		Schiedsrichter schiri = new Schiedsrichter(kasino_tisch);
-//		kasino_tisch.setSchiri(schiri);
-		long dauer =  5*1000; // 60 seconds * 1000 ms/sec
+	public static void main(String[] args) throws InterruptedException {
+		Tisch kasino_tisch = new Tisch();
+		Spieler thorben = new Spieler(1, kasino_tisch);
+		Spieler ferdi = new Spieler(2, kasino_tisch);
+		Schiedsrichter schiri = new Schiedsrichter(kasino_tisch, thorben, ferdi);
+		Timekeeper t = new Timekeeper(schiri, thorben, ferdi, 300);
 		thorben.start();
 		ferdi.start();
 		schiri.start();
-		
-		try {
-			Thread.sleep(dauer);
-			schiri.interrupt();
-			thorben.interrupt();
-			ferdi.interrupt();
-			
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		t.start();
 //		try {
 //			thorben.join();
 //			ferdi.join();
 //			schiri.join();
 //		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
+//		Timer timer = new Timer(300, new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				thorben.interrupt();
+//				ferdi.interrupt();
+//				schiri.interrupt();
+//			}
+//		});
+//		timer.setRepeats(false); // Only execute once
+//		timer.start();
+//		Thread.sleep(30);
+//		schiri.interrupt();
+//		thorben.interrupt();
+//		ferdi.interrupt();
+		
 
 	}
 
