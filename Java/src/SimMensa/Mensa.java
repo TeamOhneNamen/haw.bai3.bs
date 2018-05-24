@@ -2,7 +2,6 @@ package SimMensa;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -83,6 +82,7 @@ public class Mensa extends Thread {
 
 	}
 
+	//anstehen an der Kasse & setzt die kasse auf die kasse des studenten auf die kasse
 	public void anstehen(Student student) {
 		lock.lock();
 		ArrayList<Student> studentenListeVonKasse = kassenListe.get(0).studentenListe;
@@ -93,6 +93,7 @@ public class Mensa extends Thread {
 
 	}
 
+	//uberschreiben der aktuellen interrupt methode
 	@Override
 	public void interrupt() {
 		for (int i = 0; i < studentListe.size(); i++) {
