@@ -11,7 +11,7 @@ int main(void) {
 	//Konstanten 
 	const int size = 30;
 	const int mode = 0700;
-	char path[] = "/home/students/acf200/git/haw.bai3.bs/";
+	char path[] = "./";
 	//Variablen
 	int fd;
 	char name[size];
@@ -25,10 +25,18 @@ int main(void) {
 	//'./' und '.txt' anfügen und datei erstellen mit dem in mode gespeicherten berechtigungen
 	strcat(strcat(path, name), ".txt");
 	fd = creat(path, mode);
+	
+	
+	//Fehlermeldung abfangen
+	if (fd < 0){
+		printf("Ungueltige Eingabe");
+	}
+	else {	
+		//ausgaben
+		printf("Name der neuen Datei: %s\n", name);
+		printf("Die Datei %s wurde erfolgreich angelegt!\n", name);
+	}
 	//datei schließen
 	close(fd);
-	//ausgaben
-	printf("Name der neuen Datei: %s\n", name);
-	printf("Die Datei bsp1 wurde erfolgreich angelegt!\n");
 	return 0;
 }

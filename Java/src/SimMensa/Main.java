@@ -23,7 +23,7 @@ public class Main {
 		}
 		ArrayList<Kasse> kassenliste = mensa.getkassenListe();
 		for(int i = 0; i<kassenliste.size(); i++) {
-			System.out.println("an kasse " + kassenliste.get(i).getKASSENNUMMER() + " wurden " +kassenliste.get(i).getBezahlvorgaenge() + " Bezahlvorgänge abgeschlossen!");
+			System.out.println("an kasse " + kassenliste.get(i).getKASSENNUMMER() + " wurden " +kassenliste.get(i).getBezahlvorgaenge() + " Bezahlvorgaenge abgeschlossen!");
 		}
 	}
 

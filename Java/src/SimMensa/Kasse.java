@@ -39,7 +39,7 @@ public class Kasse extends Thread implements Comparable<Kasse> {
 	}
 
 	public void run() {
-		System.out.println("Kasse nummer: " + KASSENNUMMER + " ist jetzt Eröffnet");
+		System.out.println("Kasse nummer: " + KASSENNUMMER + " ist jetzt Erï¿½ffnet");
 		
 		arbeiten();
 	}
@@ -64,7 +64,6 @@ public class Kasse extends Thread implements Comparable<Kasse> {
 		System.out.println("Student: " + studentenListe.get(0).getID() + " hat bezahlt");
 		studentenListe.get(0).essen();
 		studentenListe.remove(0);
-
 		lock.unlock();
 	}
 	@Override
