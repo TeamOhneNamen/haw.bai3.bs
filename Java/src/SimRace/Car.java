@@ -37,7 +37,8 @@ public class Car extends Thread implements Comparable<Car>{
 					Thread.currentThread().interrupt();
 				}
 				if (this.isInterrupted()) {
-					System.out.println(carName + ": hatte einen Unfall");
+					System.out.println(carName + ": hatte einen Unfall in Runde: " + rundengefahren);
+					return;
 				}
 				zeit = zeit + randInt;
 				rundengefahren=i+1;

@@ -21,7 +21,7 @@ public class Spieler extends Thread {
 			guess();
 			this.tisch.zugriff(this.getSpielerNummer(), spielobjekt);
 		}
-
+		System.out.println("Spieler: "+ getSpielerNummer().toString()+ " beendet");
 	}
 
 	public void guess() {

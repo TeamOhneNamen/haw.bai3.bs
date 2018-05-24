@@ -14,10 +14,10 @@ re='^[0-9]+$'
 
 case $1 in
 	-s) 
-		if ![[ "$2" =~ ^[0-9]+$ ]] ; then
+		if ! [[ "$2" =~ ^[0-9]+$ ]] ; then
 			while true; do
 			# einmaliges pingen
-			ping -c 1 $2 > log.txt
+			ping -c 1 $2 > /dev/null
 			# wenn Ergebniss = 0
 			if [ "$?" -eq 0 ]; then
   				printf "$light_green" "$2 OK"
@@ -29,7 +29,7 @@ case $1 in
 		else
 			while true; do
 			# einmaliges pingen
-			ping -c 1 $3 > log.txt
+			ping -c 1 $3 > /dev/null
 			# wenn Ergebniss = 0
 			if [ "$?" -eq 0 ]; then
   				printf "$light_green" "$3 OK"
@@ -43,7 +43,7 @@ case $1 in
 	;;
 	-h) 
 		# einmaliges pingen
-		ping -c 1 $2 > log.txt
+		ping -c 1 $2 > /dev/null
 		# wenn Ergebniss = 0                   
 		if [ "$?" -eq 0 ]; then                           
   		printf "$light_green" "$2 OK"

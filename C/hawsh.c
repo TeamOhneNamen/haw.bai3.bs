@@ -112,8 +112,15 @@ int hawsh_launch(char **args)
 {
   pid_t pid;
   int status;
-
+  int background = 0;
+  printf(*args[(strlen(*args)-1)]);
   pid = fork();
+  if (*args[(strlen(*args)-1)]=='&'){
+	  printf("letztes ist &");
+	  *args[(strlen(*args)-1)] = 0;
+	  background = 1;
+	  
+  }
   if (pid == 0) {
     // Child process
     if (execvp(args[0], args) == -1) {
@@ -127,9 +134,10 @@ int hawsh_launch(char **args)
     // Parent process
     do {
       waitpid(pid, &status, WUNTRACED);
-    } while (!WIFEXITED(status) && !WIFSIGNALED(status));
-  }
 
+//    } while (!WIFEXITED(status) && !WIFSIGNALED(status) && !background);
+  } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+  }
   return 1;
 }
 

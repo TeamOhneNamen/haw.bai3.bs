@@ -23,13 +23,13 @@ int main(void) {
 	//zeilenumbruch wegschneiden
 	strtok(name, "\n");
 	//'./' und '.txt' anfügen und datei erstellen mit dem in mode gespeicherten berechtigungen
-	strcat(path, name);
+	strcat(strcat(path, name), ".txt");
 	fd = creat(path, mode);
 	
 	
 	//Fehlermeldung abfangen
 	if (fd < 0){
-		printf("Das hat nich geklappt");
+		printf("Ungueltige Eingabe");
 	}
 	else {	
 		//ausgaben
