@@ -13,155 +13,111 @@
 /*
   Function Declarations for builtin shell commands:
  */
-int hawsh_cd(char **args);
-int hawsh_version(char **args);
-int hawsh_help(char **args);
-int hawsh_quit(char **args);
+int hawsh_cd();
+int hawsh_version();
+int hawsh_help();
+int hawsh_quit();
 
-/*
-  List of builtin commands, followed by their corresponding functions.
- */
-char *builtin_str[] = {
-  "/",
-	"help",
-	"version",
-  "quit"
+
+char *builtin_str_help[] = {
+  "/:       zum aendern des verzeichnisses",
+	"help:    gibt dir alle commands aus",
+	"version: gibt die aktuelle versionsnummer und autoren zurueck",
+  "quit:    beendet die HAW-SHELL",
+  '\0'
 };
 
-int (*builtin_func[]) (char **) = {
-  &hawsh_cd,
-	&hawsh_help,
-	&hawsh_version,
-  &hawsh_quit
-};
-
-int hawsh_num_builtins() {
-  return sizeof(builtin_str) / sizeof(char *);
-}
-
-/*
-  Builtin function implementations.
-*/
-
-/**
-   @brief Bultin command: change directory.
-   @param args List of args.  args[0] is "cd".  args[1] is the directory.
-   @return Always returns 1, to continue executing.
- */
-int hawsh_cd(char **args)
+int hawsh_cd(char *args)
 {
-  if (args[1] == NULL) {
+  printf("%c", args[1]);
+  if (&args[1] == NULL) {
     fprintf(stderr, "hawsh: expected argument to \"cd\"\n");
   } else {
-    if (chdir(args[1]) != 0) {
+    if (chdir(&args[1]) != 0) {
       perror("hawsh");
     }
   }
   return 1;
 }
 
-/**
-   @brief Builtin command: print help.
-   @param args List of args.  Not examined.
-   @return Always returns 1, to continue executing.
- */
-int hawsh_version(char **args)
+int hawsh_version()
 {
   int i;
   printf("Schomacker & Trendelenburg\n");
   printf("HAW Shell 1.0\n");
 }
 
-/**
-   @brief Builtin command: print help.
-   @param args List of args.  Not examined.
-   @return Always returns 1, to continue executing.
- */
-int hawsh_help(char **args)
+int hawsh_help()
 {
   int i;
   printf("HAW Shell\n");
   printf("Type program names and arguments, and hit enter.\n");
   printf("The following are built in:\n");
 
-  for (i = 0; i < hawsh_num_builtins(); i++) {
-    printf("  %s\n", builtin_str[i]);
+  for (i = 0; i < sizeof(builtin_str_help); i++) {
+    if(builtin_str_help[i]==NULL) return 1;
+    printf("  %s\n", builtin_str_help[i]);
   }
 
   printf("Use the man command for information on other programs.\n");
   return 1;
 }
 
-/**
-   @brief Builtin command: exit.
-   @param args List of args.  Not examined.
-   @return Always returns 0, to terminate execution.
- */
-int hawsh_quit(char **args)
+int hawsh_quit()
 {
-  return 0;
+  exit(EXIT_SUCCESS);
 }
 
-
-/**
-  @brief Launch a program and wait for it to terminate.
-  @param args Null terminated list of arguments (including program).
-  @return Always returns 1, to continue execution.
- */
-int hawsh_launch(char **args)
+int hawsh_split_line(char *line)
 {
-  pid_t pid;
-  int status;
-  int background = 0;
-  printf(*args[(strlen(*args)-1)]);
-  pid = fork();
-  if (*args[(strlen(*args)-1)]=='&'){
-	  printf("letztes ist &");
-	  *args[(strlen(*args)-1)] = 0;
-	  background = 1;
-	  
-  }
-  if (pid == 0) {
-    // Child process
-    if (execvp(args[0], args) == -1) {
-      perror("hawsh");
-    }
-    exit(EXIT_FAILURE);
-  } else if (pid < 0) {
-    // Error forking
-    perror("hawsh");
-  } else {
-    // Parent process
-    do {
-      waitpid(pid, &status, WUNTRACED);
+  char newline[sizeof(line)];
+  char newlinecpy[sizeof(line)];
+  char newlinecpy2[sizeof(line)];
+  char delimiter[] = " ";
+  char *wort;
+  char *token;
+  char *args[10];
+  int i=0;
+  int position = 0;
 
-//    } while (!WIFEXITED(status) && !WIFSIGNALED(status) && !background);
-  } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+  strncpy(newline, line, sizeof(line));
+  strncpy(newlinecpy, line, sizeof(line));
+  strncpy(newlinecpy2, line, sizeof(line));
+
+  wort = strtok(newline, delimiter);
+
+  token = strtok(newlinecpy2, delimiter);
+   while (token != NULL) {
+    args[position] = token;
+    position++;
+    token = strtok(NULL, delimiter);
+
   }
+  args[position+1] = "\0";
+
+  if(strcmp(newlinecpy, "help")==0){
+    hawsh_help();
+  }else if(strcmp(newlinecpy, "version")==0){
+    hawsh_version();
+  }else if(strcmp(wort, "/")==0){
+    hawsh_cd(strpbrk(newlinecpy, delimiter));
+  }else if(strcmp(newlinecpy, "quit")==0){
+    hawsh_quit();
+  }else{
+	//Externes Programm straten funktioniert nicht!
+	printf("starte externes program ");
+	if(*args[(sizeof(args)-1)]=='&'){
+	  *args[(sizeof(args)-1)]='\0';
+	  printf("im hintergrund %s &\n", args[0]);
+	  system(("%s &", args[0]));
+	  	
+	}else{
+	  printf("%s\n", args[0]);
+	  system(("%s", args[0])); 	
+	}
+  }
+  
   return 1;
-}
-
-/**
-   @brief Execute shell built-in or launch program.
-   @param args Null terminated list of arguments.
-   @return 1 if the shell should continue running, 0 if it should terminate
- */
-int hawsh_execute(char **args)
-{
-  int i;
-
-  if (args[0] == NULL) {
-    // An empty command was entered.
-    return 1;
-  }
-
-  for (i = 0; i < hawsh_num_builtins(); i++) {
-    if (strcmp(args[0], builtin_str[i]) == 0) {
-      return (*builtin_func[i])(args);
-    }
-  }
-
-  return hawsh_launch(args);
 }
 
 #define hawsh_RL_BUFSIZE 1024
@@ -190,8 +146,7 @@ char *hawsh_read_line(void)
     } else if (c == '\n') {
       buffer[position] = '\0';
       return buffer;
-    } else {
-      buffer[position] = c;
+    } else {      buffer[position] = c;
     }
     position++;
 
@@ -206,98 +161,30 @@ char *hawsh_read_line(void)
     }
   }
 }
-
-#define hawsh_TOK_BUFSIZE 64
-#define hawsh_TOK_DELIM " \t\r\n\a"
-/**
-   @brief Split a line into tokens (very naively).
-   @param line The line.
-   @return Null-terminated array of tokens.
- */
-char **hawsh_split_line(char *line)
-{
-  int bufsize = hawsh_TOK_BUFSIZE, position = 0;
-  char **tokens = malloc(bufsize * sizeof(char*));
-  char *token, **tokens_backup;
-
-  if (!tokens) {
-    fprintf(stderr, "hawsh: allocation error\n");
-    exit(EXIT_FAILURE);
-  }
-
-  token = strtok(line, hawsh_TOK_DELIM);
-  while (token != NULL) {
-    tokens[position] = token;
-    position++;
-
-    if (position >= bufsize) {
-      bufsize += hawsh_TOK_BUFSIZE;
-      tokens_backup = tokens;
-      tokens = realloc(tokens, bufsize * sizeof(char*));
-      if (!tokens) {
-		free(tokens_backup);
-        fprintf(stderr, "hawsh: allocation error\n");
-        exit(EXIT_FAILURE);
-      }
-    }
-
-    token = strtok(NULL, hawsh_TOK_DELIM);
-  }
-  tokens[position] = NULL;
-  return tokens;
-}
-
-/**
-   @brief Loop getting input and executing it.
- */
-void hawsh_loop(void)
+void hawsh_loop()
 {
   char *line;
-  char **args;
-  int status;
-	char cwd[1024];
-char user[1024];
+  //char **args;
+  //int status;
+  char cwd[1024];
+  char user[1024];
 
   do {
-	//user = getenv("USER");
-	
-		
 		if (getcwd(cwd, sizeof(cwd)) != NULL) 
     	fprintf(stdout, "%s sitz in %s >", getenv("USER"), cwd);
 		else
 			perror("getcwd() error");
-		
-		//print instead current directory + username, what can i do for you
+	  
     line = hawsh_read_line();
-    args = hawsh_split_line(line);
-    status = hawsh_execute(args);
-
-    free(line);
-    free(args);
-  } while (status);
+    hawsh_split_line(line);
+//    status = hawsh_execute(args);
+  } while (1);
 }
 
-/**
-   @brief Main entry point.
-   @param argc Argument count.
-   @param argv Argument vector.
-   @return status code
- */
+
 int main(int argc, char **argv)
 {
-  // Load config files, if any.
-
-  // Run command loop.
   hawsh_loop();
-
-  // Perform any shutdown/cleanup.
 
   return EXIT_SUCCESS;
 }
-
-// https://brennan.io/2015/01/16/write-a-shell-in-c/
-// https://stackoverflow.com/questions/298510/how-to-get-the-current-directory-in-a-c-program
-//
-
-
-
