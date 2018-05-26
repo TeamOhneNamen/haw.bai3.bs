@@ -79,6 +79,8 @@ int hawsh_split_line(char *line)
   char *args[10];
   int i=0;
   int position = 0;
+	char last_letter;
+	int command_size; 
 
   strncpy(newline, line, sizeof(line));
   strncpy(newlinecpy, line, sizeof(line));
@@ -106,8 +108,12 @@ int hawsh_split_line(char *line)
   }else{
 	//Externes Programm straten funktioniert nicht!
 	printf("starte externes program ");
+	last_letter = args[0][7];
+	command_size = sizeof(args[0]);
+	printf("last letter %c \n", last_letter);
+	printf("size %i \n", command_size);
 	if(*args[(sizeof(args)-1)]=='&'){
-	  *args[(sizeof(args)-1)]='\0';
+	  *args[(sizeof(args)-1)]=0;
 	  printf("im hintergrund %s &\n", args[0]);
 	  system(("%s &", args[0]));
 	  	
