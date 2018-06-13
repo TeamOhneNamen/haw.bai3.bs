@@ -161,7 +161,7 @@ public class PageTable {
 		// ToDo
 		PageTableEntry pte; // Auswahl
 		
-		int maxSites = os.getMAX_NO_OF_PAGES();
+		int maxSites = pteRAMlist.size()-1;
 		Random random = new Random();
 		int rand = random.nextInt(maxSites);
 		pte = (PageTableEntry) pteRAMlist.get(rand);

@@ -1,0 +1,4 @@
+a) Ist der Wert bei absolut zufälligen Zugriffsfolgen (Lokalitätsfaktor = 1) Ihrer Ansicht nach
+plausibel? Wenn ja, aufgrund welcher Überlegung?
+Tipp: Berücksichtigen Sie die Hauptspeicherzuteilung und die Programmgröße!
+

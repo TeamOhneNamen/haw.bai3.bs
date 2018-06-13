@@ -307,30 +307,43 @@ public class OperatingSystem {
 	 *         Zugriffsfehler
 	 */
 	public synchronized int read(int pid, int virtAdr) {
-	
+
 		int virtualPageNum; // Virtuelle Seitennummer
 		int offset; // Offset innerhalb der Seite
 		int realAddress; // Reale Adresse des Datenworts
 		Process proc; // Aktuelles Prozessobjekt
 		PageTableEntry pte; // Eintrag für die zu schreibende Seite
 		
-		virtualPageNum = getVirtualPageNum(virtAdr);
-		offset = getOffset(virtAdr);
-		
 		// Übergebene Adresse prüfen
 		if ((virtAdr < 0) || (virtAdr > VIRT_ADR_SPACE - WORD_SIZE)) {
 			return -1;
 		}
 		
+	    // Seitenadresse berechnen
+	    virtualPageNum = getVirtualPageNum(virtAdr);
+	    offset = getOffset(virtAdr);
+
+	    // pte laden
 		proc = getProcess(pid);
 		pte = proc.pageTable.getPte(virtualPageNum);
-		
-		if(pte == null) {
-			return -1;
-		}
-		
-		realAddress = pte.realPageFrameAdr + offset;
-		return readFromRAM(realAddress);
+
+	    if(pte == null) {
+	          return -1;
+	      }
+
+	      // Seite vorhanden: Seite valid (im RAM)?
+	      if (!pte.valid) {
+	          // Seite nicht valid (also auf Platte --> Seitenfehler):
+	          pte = handlePageFault(pte, pid);
+	      }
+
+	      // Statistische Zählung
+	      eventLog.incrementReadAccesses();
+	      pte.referenced = true;
+
+	      // reale addresse im speicher
+	      realAddress = pte.realPageFrameAdr + offset;
+	      return readFromRAM(realAddress);
 		
 	}
 
