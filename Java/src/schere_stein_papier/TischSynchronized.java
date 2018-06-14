@@ -18,7 +18,8 @@ public class TischSynchronized extends Tisch {
 			try {
 				wait();
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				Thread.currentThread().interrupt();
+				return;
 			}
 		}
 		s.setGuesses(this.guesses);
@@ -34,6 +35,8 @@ public class TischSynchronized extends Tisch {
 			try {
 				wait();
 			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				return;
 			}
 		}
 	}

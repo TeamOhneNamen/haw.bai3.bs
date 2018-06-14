@@ -17,12 +17,14 @@ public class TischLock extends Tisch {
 	@Override
 	public void zugriff(Schiedsrichter s) {
 		lock.lock();
-		cond.signal();
+		cond.signalAll();
 		try {
 			while (guesses.containsValue(null)) {
 				cond.await();
 			}
 		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			return;
 		} finally {
 			lock.unlock();
 		}
@@ -35,12 +37,14 @@ public class TischLock extends Tisch {
 	public void zugriff(Integer i, Spielobjekt so) {
 		lock.lock();
 		this.guesses.put(i, so);
-		cond.signal();
+		cond.signalAll();
 		try {
 			while (!guesses.containsValue(null)) {
 				cond.await();
 			}
 		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			return;
 		} finally {
 			lock.unlock();
 		}

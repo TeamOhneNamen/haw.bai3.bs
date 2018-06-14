@@ -47,7 +47,7 @@ public class Mensa extends Thread {
 		studentenSpawn();
 	}
 
-	//eröffne alle kassen und speichere sie in KassenArray
+	//erï¿½ffne alle kassen und speichere sie in KassenArray
 	private void kassenEroeffnen() {
 		for (int i = 0; i < getANZAHLKASSEN(); i++) {
 			Kasse tmpKasse = new Kasse();
@@ -112,9 +112,7 @@ public class Mensa extends Thread {
 				System.out.println("Kasse: " + kassenListe.get(j).getKASSENNUMMER() + " hat jetzt geschlossen!");
 			}
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-
+			super.interrupt();
 		}
 		super.interrupt();
 	}

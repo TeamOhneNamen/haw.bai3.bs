@@ -31,4 +31,10 @@ public class Spieler extends Thread {
 	public Integer getSpielerNummer() {
 		return spieler_nummer;
 	}
+	
+	@Override
+	public void interrupt(){
+		super.interrupt();
+		
+	}
 }

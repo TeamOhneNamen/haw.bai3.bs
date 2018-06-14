@@ -9,7 +9,6 @@ public class Kasse extends Thread implements Comparable<Kasse> {
 	private int KASSENNUMMER;
 	private int bezahlvorgaenge;
 	public ArrayList<Student> studentenListe = new ArrayList<Student>();
-	private boolean kasseOffen = true;
 
 	private Lock lock = new ReentrantLock();
 
@@ -46,7 +45,7 @@ public class Kasse extends Thread implements Comparable<Kasse> {
 	
 	private void arbeiten() {
 		
-		while(kasseOffen) {
+		while(!isInterrupted()) {
 			if (!studentenListe.isEmpty()) {
 				studentenListe.get(0).bezahlenAufruf();
 			}
@@ -68,7 +67,6 @@ public class Kasse extends Thread implements Comparable<Kasse> {
 	}
 	@Override
 	public void interrupt() {
-		kasseOffen = false;
 		super.interrupt();
 	}
 

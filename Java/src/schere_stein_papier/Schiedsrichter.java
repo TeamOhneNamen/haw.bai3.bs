@@ -3,7 +3,6 @@ package schere_stein_papier;
 import java.util.HashMap;
 
 public class Schiedsrichter extends Thread {
-	private boolean interrupted = false;
 	private Tisch tisch;
 	private HashMap<String, Integer> spieler_1_stats = new HashMap<String, Integer>();
 	private HashMap<String, Integer> spieler_2_stats = new HashMap<String, Integer>();
@@ -24,7 +23,7 @@ public class Schiedsrichter extends Thread {
 
 	@Override
 	public void run() {
-		while (!interrupted) {
+		while (!isInterrupted()) {
 			System.out.println("Runde:  " + ((Integer) runde).toString());
 			tisch.zugriff(this);
 			runde++;
@@ -104,8 +103,8 @@ public class Schiedsrichter extends Thread {
 				+ this.spieler_2_stats.get("unentschieden") + "\t" + this.spieler_2_stats.get("verloren"));
 	}
 	@Override
-	public void interrupt() {
-		interrupted = true;
+	public void interrupt(){
 		super.interrupt();
+		
 	}
 }

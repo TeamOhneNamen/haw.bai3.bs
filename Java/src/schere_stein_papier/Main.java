@@ -16,6 +16,10 @@ public class Main {
 		schiri.interrupt();
 		thorben.interrupt();
 		ferdi.interrupt();
+		thorben.join();
+		ferdi.join();
+		schiri.join();
+		
 	}
 
 }
