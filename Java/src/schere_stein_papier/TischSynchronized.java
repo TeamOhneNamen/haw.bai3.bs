@@ -13,33 +13,33 @@ public class TischSynchronized extends Tisch {
 
 	@Override
 	public synchronized void zugriff(Schiedsrichter s) {
-		notifyAll();
-		while (guesses.containsValue(null)) {
 			try {
-				wait();
+				while (guesses.containsValue(null)) {
+					wait();
+				}
+				s.setGuesses(this.guesses);
+				s.auswertung();
+				leeren();
+				notifyAll();
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 				return;
 			}
 		}
-		s.setGuesses(this.guesses);
-		s.auswertung();
-		leeren();
-	}
 
 	@Override
 	public synchronized void zugriff(Integer i, Spielobjekt so) {
-		this.guesses.put(i, so);
-		notifyAll();
-		while (!guesses.containsValue(null)) {
 			try {
-				wait();
+				while (guesses.get(i) != null) {
+					wait();
+				}
+				this.guesses.put(i, so);
+				notifyAll();
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 				return;
 			}
 		}
-	}
 	@Override
 	public void leeren() {
 		this.guesses.put(1, null);
