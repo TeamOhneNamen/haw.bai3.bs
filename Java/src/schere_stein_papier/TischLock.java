@@ -6,7 +6,8 @@ import java.util.concurrent.locks.*;
 public class TischLock extends Tisch {
 	private HashMap<Integer, Spielobjekt> guesses;
 	private Lock lock = new ReentrantLock();
-	private Condition cond = lock.newCondition();
+	private Condition schiedsrichter_cond = lock.newCondition();
+	private Condition spieler_cond = lock.newCondition();
 
 	public TischLock() {
 		this.guesses = new HashMap<Integer, Spielobjekt>();
@@ -17,31 +18,34 @@ public class TischLock extends Tisch {
 	@Override
 	public void zugriff(Schiedsrichter s) {
 		lock.lock();
-		cond.signalAll();
+		
 		try {
 			while (guesses.containsValue(null)) {
-				cond.await();
+				schiedsrichter_cond.await();
 			}
+			s.setGuesses(this.guesses);
+			s.auswertung();
+			leeren();
+			spieler_cond.signalAll();
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 			return;
 		} finally {
 			lock.unlock();
 		}
-		s.setGuesses(this.guesses);
-		s.auswertung();
-		leeren();
+
 	}
 
 	@Override
 	public void zugriff(Integer i, Spielobjekt so) {
 		lock.lock();
-		this.guesses.put(i, so);
-		cond.signalAll();
+
 		try {
-			while (!guesses.containsValue(null)) {
-				cond.await();
+			while (guesses.get(i) != null) {
+				spieler_cond.await();
 			}
+			this.guesses.put(i, so);
+			schiedsrichter_cond.signal();
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 			return;
