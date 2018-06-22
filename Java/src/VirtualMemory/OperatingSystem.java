@@ -325,6 +325,7 @@ public class OperatingSystem {
 
 	    // pte laden
 		proc = getProcess(pid);
+		// evtl null pointer
 		pte = proc.pageTable.getPte(virtualPageNum);
 
 	    if(pte == null) {

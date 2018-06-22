@@ -158,10 +158,9 @@ public class PageTable {
 	 * RANDOM-Algorithmus: Zufällige Auswahl
 	 */
 	private PageTableEntry randomAlgorithm(PageTableEntry newPte) {
-		// ToDo
 		PageTableEntry pte; // Auswahl
 		
-		int maxSites = pteRAMlist.size()-1;
+		int maxSites = pteRAMlist.size();
 		Random random = new Random();
 		int rand = random.nextInt(maxSites);
 		pte = (PageTableEntry) pteRAMlist.get(rand);
